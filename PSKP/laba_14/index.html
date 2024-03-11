@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <form>
+        <h4 id="result"></h4>
+        <h3 id="page_number"></h3>
+        <input id="button_next" type="button" onclick="next()" value = "next"/></br>
+        <input id="button_back" type="button" onclick="back()" value= "back"/></br>
+    </form>
+    <script>
+        var page =0;
+        var result = document.getElementById('result');
+        var page_number = document.getElementById('page_number');
+        var button_next = document.getElementById('button_next');
+        var button_back = document.getElementById('button_back');
+
+        function next(){
+            console.log('next');
+            page++;
+		    get();
+        }
+
+        function back(){
+            console.log('back');
+            if (page > 1) {
+			page--;
+            }
+            else{
+                button_back.disable = true;
+            }
+            get();
+        }
+        function get(){
+            console.log('get');
+            result.innerHTML = "";
+            fetch(`http://localhost:5000/api/page/${page}`,{method:'GET',headers:{'Content-type':'application/json'}})
+            .then(resp=>resp.json())
+            .then(data => {
+                page_number.innerHTML ='page number: ' + page;
+                for (let i = 0; i < data.length; i++) {
+                    result.innerHTML += JSON.stringify(data[i]) + '</br>';
+                }
+            });
+        }
+    </script>
+</body>
+</html>

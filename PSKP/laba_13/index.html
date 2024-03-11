@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <form>
+        <input type="button" onclick="get()" value="get teachers"/></br>
+
+        <h4>input teacher</h4>
+        <input type="text" id="teacher"/></br>
+        <h4>input teacher name</h4>
+        <input type="text" id="teacher_name"/></br>
+        <h4>input pulpit</h4>
+        <input type="text" id="pulpit"/></br>
+
+        <input type="button" onclick="post()" value="add teacher"/></br>
+        <input type="button" onclick="put()" value="update teacher"/></br>
+        <input type="button" onclick="del()" value="delete teacher"/></br>
+    </form>
+    <h4 id="result"></h4>
+    <script>
+        var result = document.getElementById('result');
+
+        function get(){
+            fetch('http://localhost:3000/api/teachers',{method:'GET',headers:{'Content-type':'application/json'}})
+            .then(resp=>resp.json())
+            .then(pdata => {result.innerHTML = JSON.stringify(pdata)});
+        }
+        function post(){
+            let teacher = document.getElementById('teacher');
+            let teacher_name = document.getElementById('teacher_name');
+            let pulpit = document.getElementById('pulpit');
+
+            fetch('http://localhost:3000/api/teachers',
+            {method:'POST',headers:{'Content-type':'application/json'},
+            body: JSON.stringify({TEACHER: teacher.value, TEACHER_NAME: teacher_name.value, PULPIT: pulpit.value})})
+            .then(resp=>resp.json())
+            .then(pdata => {result.innerHTML = JSON.stringify(pdata)});
+        }
+        function put(){
+            let teacher = document.getElementById('teacher');
+            let teacher_name = document.getElementById('teacher_name');
+            let pulpit = document.getElementById('pulpit');
+
+            fetch('http://localhost:3000/api/teachers',
+            {method:'PUT',headers:{'Content-type':'application/json'},
+            body: JSON.stringify({TEACHER: teacher.value, TEACHER_NAME: teacher_name.value, PULPIT: pulpit.value})})
+            .then(resp=>resp.json())
+            .then(pdata => {result.innerHTML = 'count of update: '+JSON.stringify(pdata)});
+        }
+        function del(){
+            let teacher = document.getElementById('teacher');
+
+            fetch(`http://localhost:3000/api/teachers/${teacher.value}`,
+            {method:'DELETE',headers:{'Content-type':'application/json'}})
+            .then(resp=>resp.json())
+            .then(pdata => {result.innerHTML = 'count of delete: '+ JSON.stringify(pdata)});
+        }
+    </script>
+</body>
+</html>

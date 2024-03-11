@@ -1,0 +1,98 @@
+<div>
+    <form action="/update" method="POST">
+
+        <div class="Menu">
+            <input type="hidden" value="{{user.id}}" name="id"/>
+            <input id="name" value="{{user.name}}" name="name" type="name" placeholder="Имя" onchange="changeValue()">
+            <input id ='number' value="{{user.number}}" name="number" type="number" placeholder="Номер" onchange="changeValue()" >
+       </div>
+
+        <div class="Menu">
+            <button id="UpgradeButton" type="Submit" >Изменить</button>
+            <button id ="deleteButton" type="button" onclick="deleteAction({{user.id}})">Удалить</button>
+            <button type="BackButton" onclick="backAction()" >Отказаться</button>
+        </div>
+
+    </form>
+</div>
+<script>
+    var deleteButton = document.getElementById('deleteButton');
+    var upgradeButton = document.getElementById('UpgradeButton');
+    upgradeButton.disabled = true;
+
+    function changeValue()
+    {
+        deleteButton.disabled = true;
+        validName();
+        validateNumber();
+        if(nameValid && validNumber)
+        {
+            upgradeButton.disabled = false;
+            return;
+        }
+
+    }
+    function deleteAction(id){
+                fetch(`/delete?id=${id}`, {
+                method: 'DELETE'
+        })
+        .then(response => response.json())
+        .then(data => {
+            window.location='/'
+            console.log(data);
+        })
+        .catch(error => {
+            window.location='/'
+            console.error('Error:', error);
+        });
+    }
+    function backAction() {
+        window.location.href = '/';
+  }
+  function validName()
+  {
+    let userName = document.getElementById('name');
+    if(userName.value === '')
+      nameValid = false;
+    nameValid = true;
+  }
+
+  function validateNumber()
+  {
+      let arrCode = ['44','29','17','25'];
+      let userNumber = document.getElementById('number');
+
+      if(userNumber.value.length != 12){
+          validNumber = false;
+          return;
+        }
+
+      let num = '';
+      for(var i = 0; i < 3; i++)
+      {
+        num += userNumber.value[i];
+      }
+      console.log(num);
+      if(num !== '375')
+      {
+          validNumber = false;
+          return;
+      }
+      num = '';
+      for(let i = 3; i < 5; i++)
+      {
+        num += userNumber.value[i];
+      }
+      console.log(num);
+      var val = false;
+      for(let i = 0; i < arrCode.length; i++ )
+      {
+        if(num === arrCode[i])
+        {
+          validNumber = true;
+          return;
+        }
+      }
+  }
+
+</script>

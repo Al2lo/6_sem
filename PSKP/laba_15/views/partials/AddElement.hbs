@@ -1,0 +1,84 @@
+<div>
+  <form method="POST" action="/add">
+    <div class="Menu">
+      <input type="text" value="" id="name" name="name" onchange="valid()" placeholder="Имя">
+      <input type="number" value="" id="number" name="number" onchange="valid()" placeholder="Номер">
+    </div>
+    <div class="Menu">
+      <button id="addButton" type="submit">Добавить</button>
+      <button id="cancelButton" type="button" onclick="cancelAction()">Отмена</button>
+    </div>
+  </form>
+</div>
+
+<script>
+  var cancelButton = document.getElementById('cancelButton');
+  var addButton = document.getElementById('addButton');
+  var nameValid = false;
+  var numberValid = false;
+
+  addButton.disabled = true;
+
+  function validName()
+  {
+    let userName = document.getElementById('name');
+    if(userName.value === '')
+      nameValid = false;
+    nameValid = true;
+  }
+
+  function validateNumber()
+  {
+      let arrCode = ['44','29','17','25'];
+      let userNumber = document.getElementById('number');
+
+      if(userNumber.value.length != 12){
+          validNumber = false;
+          return;
+        }
+
+      let num = '';
+      for(var i = 0; i < 3; i++)
+      {
+        num += userNumber.value[i];
+      }
+      console.log(num);
+      if(num !== '375')
+      {
+          validNumber = false;
+          return;
+      }
+      num = '';
+      for(let i = 3; i < 5; i++)
+      {
+        num += userNumber.value[i];
+      }
+      console.log(num);
+      var val = false;
+      for(let i = 0; i < arrCode.length; i++ )
+      {
+        if(num === arrCode[i])
+        {
+          validNumber = true;
+          return;
+        }
+      }
+  }
+
+
+  function valid()
+  {
+    validName();
+    validateNumber();
+    if(nameValid && validNumber)
+    {
+        addButton.disabled = false;
+        console.log('yes')
+        return;
+    }
+      addButton.disabled = true;
+  }
+  function cancelAction() {
+    window.location.href = '/';
+  }
+</script>
